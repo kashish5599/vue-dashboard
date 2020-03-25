@@ -9,9 +9,25 @@
 	import { GChart } from 'vue-google-charts'
 
 	export default {
-		props: ["data"],
+		props: {
+			data: String,
+			mouseHover: Function,
+			showLine: Boolean,
+			lineData: Object
+		},
 		components: {
 			GChart
+		},
+		data () {
+			return {
+				googleObj: 'a',
+				chart: 'a'
+			}
+		},
+		watch: {
+			lineData: function(newVal) {
+				this.googleObj.visualization.events.trigger(this.chart, 'select', newVal)
+			}
 		},
 		methods: {
 			onChartReady (chart, google) {
@@ -48,6 +64,9 @@
 						}
 					}
 					chart.draw(data, options)
+					this.chart = chart
+					this.googleObj = google
+					google.visualization.events.addListener(chart, 'onmouseover', this.mouseHover);
 				})
 			}
 		}

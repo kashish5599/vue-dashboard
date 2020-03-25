@@ -41,7 +41,14 @@
 							<div class="collapse show">
 								<div class="card-body">
 									<div class="charts">
-										<LineChart v-for="graph in graphdata" v-bind:key="graph.id" v-bind:data="graph.query" />
+										<LineChart 
+											v-for="graph in graphdata" 
+											v-bind:data="graph.query" 
+											:mouseHover="mouseHover" 
+											:lineData="lineData"
+											:showLine="showLine" 
+											v-bind:key="graph.id" 
+										/>
 									</div>
 								</div>
 							</div>
@@ -62,6 +69,15 @@
 		components: {
 			LineChart
 		},
+		methods: {
+			mouseHover(e) {
+				if (e) {
+					this.showLine = true
+					this.lineData = e
+					// console.log(this)
+				}
+			}
+		},
 		data() {
 			let graphs = []
 			let alph = ["A", "B", "C", "D", "E", "F"]
@@ -72,7 +88,9 @@
 				}
 			}
 			return {
-				graphdata: graphs
+				graphdata: graphs,
+				showLine: false,
+				lineData: {}
 			}
 		}
 	}
